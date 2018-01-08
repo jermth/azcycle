@@ -30,7 +30,7 @@
         "description": "Cycle download URI"
       }
     },
-    "cycleLicenseSas": {
+    "cycleLicenseURL": {
       "maxLength": 256,
       "type": "securestring",
       "metadata": {
@@ -59,7 +59,7 @@
     "cycle_subnet": "cycle",
 
     "cycleInstallScript": ["[uri(deployment().properties.templateLink.uri, 'cyclecloud_install.sh')]"],
-    "cycleInstallCommand": "[concat('bash cyclecloud_install.sh ', parameters('cycleDownloadUri'), ' \"', parameters('cycleLicenseSas'), '\"')]",
+    "cycleInstallCommand": "[concat('bash cyclecloud_install.sh ', parameters('cycleDownloadUri'), ' \"', parameters('cycleLicenseURL'), '\"')]",
 
     "networkApiVersion": "2017-06-01",
     "computeApiVersion": "2017-03-30"

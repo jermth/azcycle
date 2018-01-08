@@ -2,7 +2,7 @@
 
 yum install -y java-1.8.0-openjdk wget
 download_uri=$1
-licenseBlobSas=$2
+licenseURL=$2
 
 cycle_root=/opt/cycle_server
 
@@ -38,7 +38,7 @@ sed -i "s/webServerKeystorePass\=changeit/webServerKeystorePass\=$randomPW/" $cy
 
 
 # get a license
-curl -f -L -S -o $cycle_root/license.dat "https://cyclecloudlicense.blob.core.windows.net/license/license.dat?$licenseBlobSas" 
+curl -f -L -S -o $cycle_root/license.dat "$licenseURL" 
 chown cycle_server. $cycle_root/license.dat
 ls -la $cycle_root/license.dat
 
