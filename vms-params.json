@@ -7,6 +7,8 @@
     "cycleIPName": { "value": "cycleserver_ip" },
     "cycleDownloadUri": { "value": "<to be filled>" },
     "cycleLicenseURL": {"value": "<to be filled>"},
-    "rsaPublicKey": { "value": "ssh-rsa <your key>" }
+    "rsaPublicKey": { "value": "ssh-rsa <your key>" },
+    "nameTag": { "value": "<to be filled>" },
+    "ownerTag": { "value": "<to be filled>" }
   }
 }

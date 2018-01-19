@@ -9,6 +9,20 @@
         "description": "Name of the VNET to add the VMs in"
       }
     },
+    "ownerTag": {
+      "maxLength": 32,
+      "type": "string",
+      "metadata": {
+        "description": "Owner tag for resources"
+      }
+    },
+    "nameTag": {
+      "maxLength": 32,
+      "type": "string",
+      "metadata": {
+        "description": "Name/Description tag for resources"
+      }
+    },
     "adminJbIPName": {
       "maxLength": 32,
       "type": "string",
@@ -70,6 +84,10 @@
       "name": "[variables('adminjbName')]",
       "apiVersion": "[variables('computeApiVersion')]",
       "location": "[variables('resourceLocation')]",
+      "tags": {
+        "Name": "[variables('nameTag')]",
+        "Owner": "[variables('ownerTag')]"
+      },	
       "properties": {
         "hardwareProfile": {
           "vmSize": "[variables('adminjbvmSize')]"
