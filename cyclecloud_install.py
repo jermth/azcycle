@@ -6,7 +6,7 @@ from random import SystemRandom
 from string import ascii_letters, digits
 from subprocess import call
 from os import path, makedirs, chdir, fdopen, remove
-from urlib import urlretrieve
+from urllib import urlretrieve
 from shutil import rmtree, copyfile, move
 from tempfile import mkstemp, mkdtemp
 
