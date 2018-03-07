@@ -253,8 +253,8 @@ def main():
                       dest="tenantId",
                       help="Tenant ID of the Azure subscription")
 
-    parser.add_argument("--applicationID",
-                      dest="applicationID",
+    parser.add_argument("--applicationId",
+                      dest="applicationId",
                       help="Application ID of the Service Principal")
 
     parser.add_argument("--applicationSecret",
@@ -280,7 +280,7 @@ def main():
     generate_ssh_key()
     modify_cs_config()
     cc_license(args.licenseURL)
-    setup_azure_account(args.tenantId, args.applicationID, args.applicationSecret, args.cyclePortalAccount, args.cyclePortalPW, args.cyclecloudAdminPW)
+    setup_azure_account(args.tenantId, args.applicationId, args.applicationSecret, args.cyclePortalAccount, args.cyclePortalPW, args.cyclecloudAdminPW)
     start_cc()
     setup_pogo_config()
 
