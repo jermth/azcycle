@@ -117,7 +117,7 @@ def account_and_cli_setup(tenant_id, application_id, application_secret, cycle_p
 
     copy2(account_data_file, cycle_root + "/config/data/")
 
-    _catch_sys_error(["/usr/local/bin/cyclecloud", "initialize", "--batch", "--url=https://localhost", "--verify-ssl=false", "--username=admin", "--password=" + "'" + cyclecloud_admin_pw + "'" ])    
+    _catch_sys_error(["/usr/local/bin/cyclecloud", "initialize", "--batch", "--url=https://localhost", "--verify-ssl=false", "--username=admin", "--password=" + cyclecloud_admin_pw])    
 
     homedir = path.expanduser("~")
     cycle_config = homedir + "/.cycle/config.ini"
