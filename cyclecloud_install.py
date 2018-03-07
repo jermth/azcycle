@@ -22,7 +22,7 @@ def clean_up():
     rmtree(tmpdir)    
 
 
-def setup_azure_account(tenant_id, application_id, application_secret, cycle_portal_account, cycle_portal_pw, cyclecloud_admin_pw):
+def csp_and_cli_setup(tenant_id, application_id, application_secret, cycle_portal_account, cycle_portal_pw, cyclecloud_admin_pw):
     metadata_url = "http://169.254.169.254/metadata/instance?api-version=2017-08-01"
     metadata_req = Request(metadata_url, headers={"Metadata" : True})
     metadata_response = urlopen(metadata_req)
@@ -283,9 +283,8 @@ def main():
     generate_ssh_key()
     modify_cs_config()
     cc_license(args.licenseURL)
-    setup_azure_account(args.tenantId, args.applicationId, args.applicationSecret, args.cyclePortalAccount, args.cyclePortalPW, args.cyclecloudAdminPW)
     start_cc()
-    setup_pogo_config()
+    setup_azure_account(args.tenantId, args.applicationId, args.applicationSecret, args.cyclePortalAccount, args.cyclePortalPW, args.cyclecloudAdminPW)
 
     clean_up()
 
