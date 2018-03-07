@@ -236,9 +236,6 @@ def main():
     
     parser = argparse.ArgumentParser(description="usage: %prog [options]")
 
-    #debug 
-    args = parser.parse_args()
-    print("Debugging arguments: " + args)
 
     parser.add_argument("--downloadURL",
                       dest="downloadURL",
@@ -278,6 +275,8 @@ def main():
                       help="Admin user password for the cyclecloud application server")
 
     args = parser.parse_args()
+
+    print("Debugging arguments: %s" % args)
 
     install_pre_req()
     download_install_cc(args.downloadURL) 
