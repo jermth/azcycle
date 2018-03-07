@@ -6,7 +6,7 @@ import json
 import re
 from random import SystemRandom
 from string import ascii_letters, ascii_lowercase, digits
-from subprocess import call
+from subprocess import CalledProcessError, check_output 
 from os import path, makedirs, chdir, fdopen, remove
 from urllib2 import urlopen, Request
 from urllib import urlretrieve
@@ -21,8 +21,18 @@ cycle_root = "/opt/cycle_server"
 def clean_up():
     rmtree(tmpdir)    
 
+def _catch_sys_error(cmd_list):
+    try:
+        output = check_output(cmd_list)
+        print output
+    except CalledProcessError as e:
+        print "Error with cmd: %s" % e.cmd
+        print "Output: %s" % e.output
+        raise
+
 
 def account_and_cli_setup(tenant_id, application_id, application_secret, cycle_portal_account, cycle_portal_pw, cyclecloud_admin_pw):
+    print "Setting up azure account in CycleCloud and initializing cyclecloud CLI"
     metadata_url = "http://169.254.169.254/metadata/instance?api-version=2017-08-01"
     metadata_req = Request(metadata_url, headers={"Metadata" : True})
     metadata_response = urlopen(metadata_req)
@@ -107,34 +117,37 @@ def account_and_cli_setup(tenant_id, application_id, application_secret, cycle_p
 
     copy2(account_data_file, cycle_root + "/config/data/")
 
-    call(["/usr/local/bin/cyclecloud", "initialize", "--batch", "--url=https://localhost", "--verify-ssl=false", "--username=admin", "--password=" + "'" + cyclecloud_admin_pw + "'" ])    
+    _catch_sys_error(["/usr/local/bin/cyclecloud", "initialize", "--batch", "--url=https://localhost", "--verify-ssl=false", "--username=admin", "--password=" + "'" + cyclecloud_admin_pw + "'" ])    
 
     homedir = path.expanduser("~")
     cycle_config = homedir + "/.cycle/config.ini"
     with open(cycle_config, "a") as config_file:
         config_file.write("\n")
-        config_file.write("[pogo azure-storage]")
-        config_file.write("type = az")
-        config_file.write("subscription_id = " + subscription_id)
-        config_file.write("tenant_id = " + tenant_id)
-        config_file.write("application_id = " + application_id)
-        config_file.write("application_secret = " + application_secret)
-        config_file.write("matches = az://"+ storage_account_name + "/cyclecloud") 
+        config_file.write("[pogo azure-storage]\n")
+        config_file.write("type = az\n")
+        config_file.write("subscription_id = " + subscription_id+ "\n")
+        config_file.write("tenant_id = " + tenant_id + "\n")
+        config_file.write("application_id = " + application_id + "\n")
+        config_file.write("application_secret = " + application_secret + "\n")
+        config_file.write("matches = az://"+ storage_account_name + "/cyclecloud" + "\n") 
 
 
 def start_cc():
+    print "Starting CycleCloud server"
     cs_cmd = cycle_root + "/cycle_server"
-    call([cs_cmd, "start"])
-    call([cs_cmd, "await_startup"])
-    call([cs_cmd, "status"])
+    _catch_sys_error([cs_cmd, "start"])
+    _catch_sys_error([cs_cmd, "await_startup"])
+    _catch_sys_error([cs_cmd, "status"])
 
 def _sslCert(randomPW):
-    call(["/bin/keytool", "-genkey", "-alias", "CycleServer", "-keypass", randomPW, "-keystore", cycle_root + "/.keystore", "-storepass", randomPW, "-keyalg", "RSA", "-noprompt", "-dname", "CN=cycleserver.azure.com,OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=Unknown"])
-    call(["chown", "cycle_server.", cycle_root+"/.keystore"])
-    call(["chmod", "600", cycle_root+"/.keystore" ])
+    print "Generating self-signed SSL cert"
+    _catch_sys_error(["/bin/keytool", "-genkey", "-alias", "CycleServer", "-keypass", randomPW, "-keystore", cycle_root + "/.keystore", "-storepass", randomPW, "-keyalg", "RSA", "-noprompt", "-dname", "CN=cycleserver.azure.com,OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=Unknown"])
+    _catch_sys_error(["chown", "cycle_server.", cycle_root+"/.keystore"])
+    _catch_sys_error(["chmod", "600", cycle_root+"/.keystore" ])
 
 
 def modify_cs_config():
+    print "Editing CycleCloud server system properties file"
     # modify the CS config files
     cs_config_file = cycle_root + "/config/cycle_server.properties"
 
@@ -163,11 +176,11 @@ def modify_cs_config():
     move(tmp_cs_config_file, cs_config_file)
 
     #Ensure that the files are created by the cycleserver service user
-    call(["chown", "-R", "cycle_server.", cycle_root])
+    _catch_sys_error(["chown", "-R", "cycle_server.", cycle_root])
 
 
 def generate_ssh_key():
-    # create an SSH private key for VM access
+    print "Creating an SSH private key for VM access"
     homedir = path.expanduser("~")
     sshdir = homedir + "/.ssh"
     if not path.isdir(sshdir):
@@ -175,7 +188,7 @@ def generate_ssh_key():
     
     sshkeyfile = sshdir + "/cyclecloud.pem"
     if not path.isfile(sshkeyfile):
-        call(["ssh-keygen", "-f", sshkeyfile, "-t", "rsa", "-b", "2048","-P", ''])
+        _catch_sys_error(["ssh-keygen", "-f", sshkeyfile, "-t", "rsa", "-b", "2048","-P", ''])
 
     # make the cyclecloud.pem available to the cycle_server process
     cs_sshdir = cycle_root + "/.ssh"
@@ -186,7 +199,7 @@ def generate_ssh_key():
     
     if not path.isdir(cs_sshkeyfile):
         copy2(sshkeyfile, cs_sshkeyfile)
-        call(["chown", "-R", "cycle_server.", cs_sshdir])
+        _catch_sys_error(["chown", "-R", "cycle_server.", cs_sshdir])
 
 
 def cc_license(license_url):
@@ -194,7 +207,7 @@ def cc_license(license_url):
     license_file = cycle_root + '/license.dat'
     print "Fetching temporary license from " + license_url
     urlretrieve(license_url, license_file)
-    call(["chown", "cycle_server.", license_file])
+    _catch_sys_error(["chown", "cycle_server.", license_file])
 
 
 def download_install_cc(download_url):    
@@ -226,11 +239,12 @@ def download_install_cc(download_url):
     pogo_tar.close()
     copy2("pogo", "/usr/local/bin")
 
-    call(["cycle_server/install.sh", "--nostart"])
+    _catch_sys_error(["cycle_server/install.sh", "--nostart"])
 
 
 def install_pre_req():
-    call(["yum", "install", "-y", "java-1.8.0-openjdk"])
+    print "Installing pre-requisites for CycleCloud server"
+    _catch_sys_error(["yum", "install", "-y", "java-1.8.0-openjdk"])
 
 def main():
     
@@ -245,10 +259,6 @@ def main():
     parser.add_argument("--licenseURL",
                       dest="licenseURL",
                       help="Download URL for trial license")
-
-    parser.add_argument("--cycleserverPW",
-                      dest="cycleserverPW",
-                      help="Admin password for CycleCloud server")
 
     parser.add_argument("--tenantId",
                       dest="tenantId",
