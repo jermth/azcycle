@@ -236,9 +236,13 @@ def main():
     
     parser = argparse.ArgumentParser(description="usage: %prog [options]")
 
+    #debug 
+    args = parser.parse_args()
+    print("Debugging arguments: " + args)
+
     parser.add_argument("--downloadURL",
                       dest="downloadURL",
-                      required=True,
+                    #   required=True,
                       help="Download URL for the Cycle install")
 
     parser.add_argument("--licenseURL",
