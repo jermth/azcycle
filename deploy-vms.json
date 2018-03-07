@@ -24,6 +24,13 @@
             },
             "type": "securestring"
         },
+        "cyclecloudAdminPW": {
+            "maxLength": 128,
+            "metadata": {
+                "description": "Admin password to use for the CycleCloud application"
+            },
+            "type": "securestring"
+        },
         "applicationSecret": {
             "maxLength": 36,
             "metadata": {
@@ -294,7 +301,7 @@
         "adminjbNic": "adminjb-nic",
         "adminjbvmSize": "Standard_D2s_v3",
         "computeApiVersion": "2017-03-30",
-        "cycleInstallCommand": "[concat('python cyclecloud_install.py ', '--cyclePortalPW ', '\"', parameters('cyclePortalPW'), '\"', '--cyclePortalAccount ', '\"', parameters('cyclePortalAccount'), '\"', '--applicationSecret ', '\"', parameters('applicationSecret'), '\"', '--applicationID ', '\"', parameters('applicationID'), '\"', '--tenantId ', '\"', parameters('tenantId'), '\"', '--cycleDownloadUri ', '\"', parameters('cycleDownloadUri'), '\"', '--cycleLicenseURL ', '\"', parameters('cycleLicenseURL'),  '\"')]",
+        "cycleInstallCommand": "[concat('python cyclecloud_install.py ', '--cyclePortalPW ', '\"', parameters('cyclePortalPW'), '\"', '--cyclePortalAccount ', '\"', parameters('cyclePortalAccount'), '\"', '--applicationSecret ', '\"', parameters('applicationSecret'), '\"', '--applicationID ', '\"', parameters('applicationID'), '\"', '--tenantId ', '\"', parameters('tenantId'), '\"', '--cycleDownloadUri ', '\"', parameters('cycleDownloadUri'), '\"', '--cycleLicenseURL ', '\"', parameters('cycleLicenseURL'),  '\"', '--cyclecloudAdminPW ', '\"', parameters('cyclecloudAdminPW'), '\"')]",
         "cycleInstallScript": [
             "[uri(deployment().properties.templateLink.uri, 'cyclecloud_install.py')]"
         ],
