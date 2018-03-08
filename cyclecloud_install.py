@@ -122,6 +122,8 @@ def account_and_cli_setup(tenant_id, application_id, application_secret, cycle_p
     # wait for the data to be imported
     password_flag = ("--password=%s" % cyclecloud_admin_pw) 
     sleep(5)
+
+    print "Initializing cylcecloud CLI"
     _catch_sys_error(["/usr/local/bin/cyclecloud", "initialize", "--loglevel=debug", "--batch", "--url=https://localhost", "--verify-ssl=false", "--username=admin", password_flag])    
 
     homedir = path.expanduser("~")
@@ -135,6 +137,11 @@ def account_and_cli_setup(tenant_id, application_id, application_secret, cycle_p
         config_file.write("application_id = " + application_id + "\n")
         config_file.write("application_secret = " + application_secret + "\n")
         config_file.write("matches = az://"+ storage_account_name + "/cyclecloud" + "\n") 
+
+
+    print "Registering Azure subscription"
+    # create the cloud provide account
+    _catch_sys_error(["/usr/local/bin/cyclecloud", "account", "create", "-f", azure_data_file])
 
 
 def start_cc():
