@@ -24,6 +24,7 @@ def clean_up():
 def _catch_sys_error(cmd_list):
     try:
         output = check_output(cmd_list)
+        print cmd_list
         print output
     except CalledProcessError as e:
         print "Error with cmd: %s" % e.cmd
@@ -117,7 +118,8 @@ def account_and_cli_setup(tenant_id, application_id, application_secret, cycle_p
 
     copy2(account_data_file, cycle_root + "/config/data/")
 
-    _catch_sys_error(["/usr/local/bin/cyclecloud", "initialize", "--batch", "--url=https://localhost", "--verify-ssl=false", "--username=admin", "--password=" + cyclecloud_admin_pw])    
+    password_flag = ('--password=%s' % cyclecloud_admin_pw)
+    _catch_sys_error(["/usr/local/bin/cyclecloud", "initialize", "--loglevel=debug", "--batch", "--url=https://localhost", "--verify-ssl=false", "--username=admin", password_flag ])    
 
     homedir = path.expanduser("~")
     cycle_config = homedir + "/.cycle/config.ini"
@@ -288,12 +290,12 @@ def main():
 
     print("Debugging arguments: %s" % args)
 
-    install_pre_req()
-    download_install_cc(args.downloadURL) 
-    generate_ssh_key()
-    modify_cs_config()
-    cc_license(args.licenseURL)
-    start_cc()
+    # install_pre_req()
+    # download_install_cc(args.downloadURL) 
+    # generate_ssh_key()
+    # modify_cs_config()
+    # cc_license(args.licenseURL)
+    # start_cc()
     account_and_cli_setup(args.tenantId, args.applicationId, args.applicationSecret, args.cyclePortalAccount, args.cyclePortalPW, args.cyclecloudAdminPW)
 
     clean_up()
