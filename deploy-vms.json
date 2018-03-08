@@ -291,7 +291,10 @@
         },
         {
             "apiVersion": "[variables('networkApiVersion')]",
-            "dependsOn": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('adminjbNsgName'))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('adminJbIPName'))]"
+            ],
             "location": "[variables('resourceLocation')]",
             "name": "[variables('adminjbNic')]",
             "properties": {
@@ -410,7 +413,10 @@
         },
         {
             "apiVersion": "[variables('networkApiVersion')]",
-            "dependsOn": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups', variables('cycleNsgName'))]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', variables('cycleIPName'))]"
+            ],
             "location": "[variables('resourceLocation')]",
             "name": "[variables('cycleNic')]",
             "properties": {
