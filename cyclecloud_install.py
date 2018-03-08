@@ -12,6 +12,7 @@ from urllib2 import urlopen, Request
 from urllib import urlretrieve
 from shutil import rmtree, copy2, move
 from tempfile import mkstemp, mkdtemp
+from time import sleep
 
 
 tmpdir = mkdtemp()
@@ -118,8 +119,9 @@ def account_and_cli_setup(tenant_id, application_id, application_secret, cycle_p
 
     copy2(account_data_file, cycle_root + "/config/data/")
 
-    password_flag = ('--password=%s' % cyclecloud_admin_pw)
-    _catch_sys_error(["/usr/local/bin/cyclecloud", "initialize", "--loglevel=debug", "--batch", "--url=https://localhost", "--verify-ssl=false", "--username=admin", password_flag ])    
+    # wait for the data to be imported
+    sleep(3)
+    _catch_sys_error(["/usr/local/bin/cyclecloud", "initialize", "--loglevel=debug", "--batch", "--url=https://localhost", "--verify-ssl=false", "--username=admin", ("--password='%s'" % cyclecloud_admin_pw)])    
 
     homedir = path.expanduser("~")
     cycle_config = homedir + "/.cycle/config.ini"
