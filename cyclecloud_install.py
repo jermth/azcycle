@@ -120,7 +120,7 @@ def account_and_cli_setup(tenant_id, application_id, application_secret, cycle_p
     copy2(account_data_file, cycle_root + "/config/data/")
 
     # wait for the data to be imported
-    password_flag = ("--password='%s'" % cyclecloud_admin_pw) 
+    password_flag = ("--password=%s" % cyclecloud_admin_pw) 
     sleep(5)
     _catch_sys_error(["/usr/local/bin/cyclecloud", "initialize", "--loglevel=debug", "--batch", "--url=https://localhost", "--verify-ssl=false", "--username=admin", password_flag])    
 
