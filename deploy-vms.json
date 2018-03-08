@@ -124,7 +124,7 @@
     "resources": [
     {
         "type": "Microsoft.Network/networkSecurityGroups",
-        "name": "admin-nsg",
+        "name": "[variables('adminjbNsgName')]",
         "apiVersion": "[variables('networkApiVersion')]",
         "location": "[variables('resourceLocation')]",
         "properties": {
@@ -165,7 +165,7 @@
         },
         {
         "type": "Microsoft.Network/networkSecurityGroups",
-        "name": "cycle-nsg",
+        "name": "[variables('cycleNsgName')]",
         "apiVersion": "[variables('networkApiVersion')]",
         "location": "[variables('resourceLocation')]",
         "properties": {
@@ -315,7 +315,7 @@
                     }
                 ],
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('admin_nsg_name'))]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('adminjbNsgName'))]"
                 },
                 "primary": true
             },
@@ -434,7 +434,7 @@
                     }
                 ],
                 "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('cycle_nsg_name'))]"
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('cycleNsgName'))]"
                 },
                 "primary": true
             },
@@ -442,7 +442,7 @@
         }
     ],
     "variables": {
-        "admin_nsg_name": "admin-nsg",
+        "adminjbNsgName": "admin-nsg",
         "adminjbName": "adminjb",
         "adminjbNic": "adminjb-nic",
         "adminJbIPName": "adminjb-ip",
@@ -454,7 +454,7 @@
         ],
         "cycleName": "cycleserver",
         "cycleNic": "cycle-nic",
-        "cycle_nsg_name": "cycle-nsg",
+        "cycleNsgName": "cycle-nsg",
         "cycleIPName": "cycle-ip",
         "namingInfix": "[toLower(take(uniqueString(resourceGroup().id), 6))]",
         "networkApiVersion": "2017-06-01",
