@@ -206,7 +206,7 @@
         },
         {
         "type": "Microsoft.Network/publicIPAddresses",
-        "name": "adminjb_ip",
+        "name": "[variables('adminJbIPName')]",
         "apiVersion": "[variables('networkApiVersion')]",
         "location": "[variables('resourceLocation')]",
         "properties": {
@@ -221,7 +221,7 @@
         },
         {
         "type": "Microsoft.Network/publicIPAddresses",
-        "name": "cycleserver_ip",
+        "name": "[variables('cycleIPName')]",
         "apiVersion": "[variables('networkApiVersion')]",
         "location": "[variables('resourceLocation')]",
         "properties": {
