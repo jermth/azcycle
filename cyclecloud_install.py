@@ -290,12 +290,12 @@ def main():
 
     print("Debugging arguments: %s" % args)
 
-    # install_pre_req()
-    # download_install_cc(args.downloadURL) 
-    # generate_ssh_key()
-    # modify_cs_config()
-    # cc_license(args.licenseURL)
-    # start_cc()
+    install_pre_req()
+    download_install_cc(args.downloadURL) 
+    generate_ssh_key()
+    modify_cs_config()
+    cc_license(args.licenseURL)
+    start_cc()
     account_and_cli_setup(args.tenantId, args.applicationId, args.applicationSecret, args.cyclePortalAccount, args.cyclePortalPW, args.cyclecloudAdminPW)
 
     clean_up()
