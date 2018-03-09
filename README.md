@@ -4,12 +4,12 @@ Starting a CycleCloud server using Azure Resource Manager templates
 ## Introduction
 - This template is used to deploy a CycleCloud application server in an Azure subscription.
 - There are two ARM templates in here. 
-        - `deploy-vnet.json` creates a VNET with 4 separate subnets:
-                1. `admin`: The subnet in which an SSH jump box is started in.
-                2. `cycle`: The subnet in which the CycleCloud server is started in.
-                3. `compute`: A /22 subnet for the HPC clusters
-                4. `user`: The subnet for creating login nodes.
-        - `deploy-cyclecloud.json` provisions an SSH jumpbox and the CycleCloud application server.
+    - `deploy-vnet.json` creates a VNET with 4 separate subnets:
+        1. `admin`: The subnet in which an SSH jump box is started in.
+        2. `cycle`: The subnet in which the CycleCloud server is started in.
+        3. `compute`: A /22 subnet for the HPC clusters
+        4. `user`: The subnet for creating login nodes.
+    - `deploy-cyclecloud.json` provisions an SSH jumpbox and the CycleCloud application server.
 
 
 ## Create VNET
@@ -86,6 +86,7 @@ The easiest way to retrieve it:
 * The follwing attributes from the service principal: `applicationSecret`, `tenantId`, `applicationId`
 *  `cyclecloudAdminPW`: Specifiy a password for the `admin` user for the Cyclecloud application server. The password needs to meet the following specifications: 
 
+        Between 3-8 characters and meeting three of the following four conditions:
         - Contains an upper case character
         - Contains a lower case character
         - Contains a number
