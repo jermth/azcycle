@@ -174,8 +174,8 @@
       "apiVersion": "[variables('computeApiVersion')]",
       "location": "[variables('resourceLocation')]",
       "tags": {
-        "Name": "[variables('nameTag')]",
-        "Owner": "[variables('ownerTag')]"
+        "Name": "[parameters('nameTag')]",
+        "Owner": "[parameters('ownerTag')]"
       },		
       "identity": { 
 	  "type": "systemAssigned"
