@@ -10,6 +10,7 @@ Starting a CycleCloud server using Azure Resource Manager templates
         3. `compute`: A /22 subnet for the HPC clusters
         4. `user`: The subnet for creating login nodes.
     - `deploy-cyclecloud.json` provisions an SSH jumpbox and the CycleCloud application server.
+- If you have a VNET (or subnets) that you want to deploy in, you can skip the the Vnet deployment. 
 
 
 ## Create VNET
