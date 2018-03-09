@@ -31,23 +31,21 @@ Starting a CycleCloud server using Azure Resource Manager templates
 
 2. [Service principal in your Azure Active Directory](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest)
 
-Succintly:
+- Using the AZ CLI:
 ```
-
-        $ az ad sp create-for-rbac --name CycleCloudApp --years 1
-
-Save the output -- you'll need the appId, password and tenant id.
-        {
-                "appId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-                "displayName": "CycleCloudApp",
-                "name": "http://CycleCloudApp",
-                "password": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-                "tenant": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-        }
+    $ az ad sp create-for-rbac --name CycleCloudApp --years 1
+    {
+        "appId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "displayName": "CycleCloudApp",
+        "name": "http://CycleCloudApp",
+        "password": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "tenant": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    }
 ```
+- Save the output -- you'll need the appId, password and tenant id.
+
 3. Azure subscription ID. 
-
-The easiest way to retrieve it:
+- The easiest way to retrieve it:
 ```
         $ az account list -o table
 ```
@@ -61,18 +59,18 @@ The easiest way to retrieve it:
 
 * Clone the repo 
 
-        git clone https://github.com/{githubuser}/azcycle.git
+        $ git clone https://github.com/{githubuser}/azcycle.git
 
 ### Create a Resource Group and VNET
 * *_If you already have a VNET in a Resource Group that you would like to deploy CycleCloud in, skip this step and use the VNET and resource group in the next section_*
 
 * Create a resource group in the region of your choice:
 
-        az group create --name "{RESOURCE-GROUP}" --location "{REGION}"
+        $ az group create --name "{RESOURCE-GROUP}" --location "{REGION}"
 
 * Build the Virtual Network and subnets. By default the vnet is named **cyclevnet** . Update the **{githubuser}** value with your github user name
 
-        az group deployment create --name "vnet_deployment" --resource-group "{RESOURCE-GROUP}" --template-uri https://raw.githubusercontent.com/{githubuser}/azcycle/master/deploy-vnet.json --parameters params-vnet.json
+        $ az group deployment create --name "vnet_deployment" --resource-group "{RESOURCE-GROUP}" --template-uri https://raw.githubusercontent.com/{githubuser}/azcycle/master/deploy-vnet.json --parameters params-vnet.json
 
 ### Deploy CycleCloud
 
@@ -94,7 +92,7 @@ The easiest way to retrieve it:
 
 2. Deploy the jumpbox and CycleCloud server:
 
-        az group deployment create --name "cyclecloud_deployment" --resource-group "{RESOURCE-GROUP}" --template-uri https://raw.githubusercontent.com/{githubuser}/azcycle/master/deploy-cyclecloud.json --parameters params-cyclecloud.json
+        $ az group deployment create --name "cyclecloud_deployment" --resource-group "{RESOURCE-GROUP}" --template-uri https://raw.githubusercontent.com/{githubuser}/azcycle/master/deploy-cyclecloud.json --parameters params-cyclecloud.json
 
 The deployment process runs the installation script `cyclecloud_install.py` as a custom extension script, which installs and sets up CycleCloud.
 
