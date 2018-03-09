@@ -22,7 +22,7 @@
       "metadata": {
         "description": "Name/Description tag for resources"
       }
-    },
+    },      
     "adminJbIPName": {
       "maxLength": 32,
       "type": "string",
@@ -84,10 +84,6 @@
       "name": "[variables('adminjbName')]",
       "apiVersion": "[variables('computeApiVersion')]",
       "location": "[variables('resourceLocation')]",
-      "tags": {
-        "Name": "[variables('nameTag')]",
-        "Owner": "[variables('ownerTag')]"
-      },	
       "properties": {
         "hardwareProfile": {
           "vmSize": "[variables('adminjbvmSize')]"
@@ -177,6 +173,13 @@
       "name": "[variables('cycleName')]",
       "apiVersion": "[variables('computeApiVersion')]",
       "location": "[variables('resourceLocation')]",
+      "tags": {
+        "Name": "[variables('nameTag')]",
+        "Owner": "[variables('ownerTag')]"
+      },		
+      "identity": { 
+	  "type": "systemAssigned"
+      },	  
       "properties": {
         "hardwareProfile": {
           "vmSize": "[variables('cyclevmSize')]"
@@ -259,6 +262,25 @@
         "[resourceId('Microsoft.Network/networkInterfaces', variables('cycleNic'))]"
       ]
     },
+    { 
+	"type": "Microsoft.Compute/virtualMachines/extensions",
+	"name": "[concat(variables('cycleName'),'/ManagedIdentityExtensionForLinux')]",
+	"apiVersion": "2016-03-30",
+	"location": "[resourceGroup().location]",
+	"dependsOn": [
+	    "[concat('Microsoft.Compute/virtualMachines/', variables('cycleName'))]"
+	],
+	"properties": {
+	    "publisher": "Microsoft.ManagedIdentity",
+	    "type": "ManagedIdentityExtensionForLinux",
+	    "typeHandlerVersion": "1.0",
+	    "autoUpgradeMinorVersion": true,
+	    "settings": {
+		"port": 50342
+	    },
+	    "protectedSettings": {}
+	}
+    },      
 
     {
       "type": "Microsoft.Network/networkInterfaces",
