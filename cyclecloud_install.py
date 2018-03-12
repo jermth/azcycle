@@ -44,10 +44,10 @@ def account_and_cli_setup(tenant_id, application_id, application_secret, cycle_p
     location = vm_metadata["compute"]["location"]
     resource_group = vm_metadata["compute"]["resourceGroupName"]
 
-    random_suffix = ''.join(SystemRandom().choice(ascii_lowercase + digits) for _ in range(8))
+    random_suffix = ''.join(SystemRandom().choice(ascii_lowercase) for _ in range(14))
 
     non_alphanu = re.compile('[\W_]+')
-    storage_account_name = non_alphanu.sub('',resource_group).lower()  + random_suffix 
+    storage_account_name = 'cyclecloud'  + random_suffix 
 
     azure_data = {
         "Name": "azure",
