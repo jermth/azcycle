@@ -179,6 +179,8 @@ def modify_cs_config():
                     new_config.write('webServerSslPort=443')
                 elif 'webServerEnableHttps=' in line:
                     new_config.write('webServerEnableHttps=true')
+                elif 'webServerRedirectHttp=' in line:
+                    new_config.write('webServerRedirectHttp=true')
                 elif 'webServerKeystorePass=' in line:
                     new_config.write('webServerKeystorePass=' + randomPW)
                 else:
