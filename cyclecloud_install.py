@@ -214,6 +214,7 @@ def generate_ssh_key():
     if not path.isdir(cs_sshkeyfile):
         copy2(sshkeyfile, cs_sshkeyfile)
         _catch_sys_error(["chown", "-R", "cycle_server.", cs_sshdir])
+        _catch_sys_error(["chown", "700", "cycle_server.", cs_sshdir])
 
 
 def cc_license(license_url):
