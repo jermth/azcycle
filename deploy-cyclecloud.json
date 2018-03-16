@@ -73,7 +73,7 @@
             "type": "securestring"
         },
         "applicationSecret": {
-            "maxLength": 36,
+            "maxLength": 128,
             "metadata": {
                 "description": "Service Principal Application Secret"
             },
