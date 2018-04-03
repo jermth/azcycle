@@ -107,6 +107,14 @@
             },
             "type": "securestring"
         },
+        "adminUser": {
+            "maxLength": 32,
+            "type": "string",
+            "defaultValue": "cycleadmin",
+            "metadata": {
+              "description": "The SSH admin user for the VMs"
+            }
+          },        
         "rsaPublicKey": {
             "metadata": {
                 "description": "The RSA public key to access the VMs."
@@ -254,7 +262,7 @@
                     ]
                 },
                 "osProfile": {
-                    "adminUsername": "cycleadmin",
+                    "adminUsername": "[parameters('adminUser')]",
                     "computerName": "[variables('adminjbName')]",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": true,
@@ -262,7 +270,7 @@
                             "publicKeys": [
                                 {
                                     "keyData": "[parameters('rsaPublicKey')]",
-                                    "path": "/home/cycleadmin/.ssh/authorized_keys"
+                                    "path": "[variables('authorizedKeyFile')]"
                                 }
                             ]
                         }
@@ -343,7 +351,7 @@
                     ]
                 },
                 "osProfile": {
-                    "adminUsername": "cycleadmin",
+                    "adminUsername": "[parameters('adminUser')]",
                     "computerName": "[variables('cycleName')]",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": true,
@@ -351,7 +359,7 @@
                             "publicKeys": [
                                 {
                                     "keyData": "[parameters('rsaPublicKey')]",
-                                    "path": "/home/cycleadmin/.ssh/authorized_keys"
+                                    "path": "[variables('authorizedKeyFile')]"
                                 }
                             ]
                         }
@@ -452,9 +460,9 @@
         "adminjbName": "adminjb",
         "adminjbNic": "adminjb-nic",
         "adminJbIPName": "adminjb-ip",
-
+        "authorizedKeyFile": "[concat('/home/', parameters('adminUser'),'/.ssh/authorized_keys']",
         "computeApiVersion": "2017-03-30",
-        "cycleInstallCommand": "[concat('python cyclecloud_install.py ', '--cyclePortalPW ', '\"', parameters('cyclePortalPW'), '\"', ' --cyclePortalAccount ', '\"', parameters('cyclePortalAccount'), '\"', ' --applicationSecret ', '\"', parameters('applicationSecret'), '\"', ' --applicationId ', '\"', parameters('applicationId'), '\"', ' --tenantId ', '\"', parameters('tenantId'), '\"', ' --downloadURL ', '\"', parameters('cycleDownloadURL'), '\"', ' --licenseURL ', '\"', parameters('cycleLicenseURL'),  '\"', ' --cyclecloudAdminPW ', '\"', parameters('cyclecloudAdminPW'), '\"')]",
+        "cycleInstallCommand": "[concat('python cyclecloud_install.py ', '--cyclePortalPW ', '\"', parameters('cyclePortalPW'), '\"', ' --cyclePortalAccount ', '\"', parameters('cyclePortalAccount'), '\"', ' --applicationSecret ', '\"', parameters('applicationSecret'), '\"', ' --applicationId ', '\"', parameters('applicationId'), '\"', ' --tenantId ', '\"', parameters('tenantId'), '\"', ' --downloadURL ', '\"', parameters('cycleDownloadURL'), '\"', ' --licenseURL ', '\"', parameters('cycleLicenseURL'),  '\"', ' --cyclecloudAdminPW ', '\"', parameters('cyclecloudAdminPW'), '\"',  ' --adminUser ', '\"', parameters('adminUser'), '\"')]",
         "cycleInstallScript": [
             "[uri(deployment().properties.templateLink.uri, 'cyclecloud_install.py')]"
         ],

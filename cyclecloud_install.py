@@ -10,7 +10,7 @@ from subprocess import CalledProcessError, check_output
 from os import path, makedirs, chdir, fdopen, remove
 from urllib2 import urlopen, Request
 from urllib import urlretrieve
-from shutil import rmtree, copy2, move
+from shutil import rmtree, copy2, move, copytree
 from tempfile import mkstemp, mkdtemp
 from time import sleep
 
@@ -33,7 +33,7 @@ def _catch_sys_error(cmd_list):
         raise
 
 
-def account_and_cli_setup(tenant_id, application_id, application_secret, cycle_portal_account, cycle_portal_pw, cyclecloud_admin_pw):
+def account_and_cli_setup(tenant_id, application_id, application_secret, cycle_portal_account, cycle_portal_pw, cyclecloud_admin_pw, admin_user):
     print "Setting up azure account in CycleCloud and initializing cyclecloud CLI"
     metadata_url = "http://169.254.169.254/metadata/instance?api-version=2017-08-01"
     metadata_req = Request(metadata_url, headers={"Metadata" : True})
@@ -142,6 +142,11 @@ def account_and_cli_setup(tenant_id, application_id, application_secret, cycle_p
     print "Registering Azure subscription"
     # create the cloud provide account
     _catch_sys_error(["/usr/local/bin/cyclecloud", "account", "create", "-f", azure_data_file])
+
+    # stash the cyclecloud configs into the admin_user account as well
+    copytree(homedir + "/.cycle", "/home/" + admin_user + "/" )
+
+
 
 
 def start_cc():
@@ -299,6 +304,10 @@ def main():
                       dest="cyclecloudAdminPW",
                       help="Admin user password for the cyclecloud application server")
 
+    parser.add_argument("--adminUser",
+                      dest="adminUser",
+                      help="The local admin user for the CycleCloud VM")
+
     args = parser.parse_args()
 
     print("Debugging arguments: %s" % args)
@@ -309,7 +318,7 @@ def main():
     modify_cs_config()
     cc_license(args.licenseURL)
     start_cc()
-    account_and_cli_setup(args.tenantId, args.applicationId, args.applicationSecret, args.cyclePortalAccount, args.cyclePortalPW, args.cyclecloudAdminPW)
+    account_and_cli_setup(args.tenantId, args.applicationId, args.applicationSecret, args.cyclePortalAccount, args.cyclePortalPW, args.cyclecloudAdminPW, args.adminUser)
 
     clean_up()
 
