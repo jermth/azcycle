@@ -1,3 +1,14 @@
+# :exclamation: This repo is deprecated :exclamation:
+## If you are looking for an ARM template for deploying Azure CycleCloud, use the [CycleCloud Community Repo](https://github.com/cyclecloudcommunity/cyclecloud_arm)
+
+
+
+
+
+
+
+
+
 # azcycle
 Cycle Server on Azure scripts and templates
 
